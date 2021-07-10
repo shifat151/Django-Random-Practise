@@ -1,0 +1,89 @@
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+
+{% if graph %}
+{{ graph|safe }}
+{% else %}
+<p>No graph was provided.</p>
+{% endif %}
+
+<div id="show-graph">
+
+</div>
+<form id="graph-form" action="{% url 'final' %}" method="get">
+    <input type="hidden"
+           name="q"
+           value="load">
+    <input type="submit" 
+           value="Load Data">
+</form>
+
+<script>
+
+$(document).ready(function () {
+
+    $('#graph-form').on('submit', function (e) {
+        e.preventDefault();
+        var data = {'q': 'load'}
+        var formURL = $(this).attr('action')
+        
+        $.ajax({
+            url: formURL,
+            type: "get",
+            data: data,
+            success: function (response) {
+                // on successfull creating object
+                // 1. clear the form.
+                // $("#contact-form").trigger('reset');
+                // $(".spinner").hide();
+                // handleAlerts('success', 'Your email has been sent successfully.');
+                console.log("success")
+                console.log(response['graph'])
+                $("#show-graph").html(response['graph']);
+            },
+            error: function (response) {
+                // alert the error if any error occured
+                //     console.log(response["responseJSON"])
+                // $(".spinner").hide();
+                console.log("error")
+                $("#show-graph").html("Hello <b>Failure</b>!");
+
+            },
+
+        });
+    });
+
+});
+
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+const csrftoken = getCookie('csrftoken');
+
+function csrfSafeMethod(method) {
+    // these HTTP methods do not require CSRF protection
+    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+}
+
+$.ajaxSetup({
+    beforeSend: function (xhr, settings) {
+        if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+            xhr.setRequestHeader("X-CSRFToken", csrftoken);
+        }
+    }
+});
+</script>
