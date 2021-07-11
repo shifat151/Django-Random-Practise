@@ -2,28 +2,23 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 
+
+
+<div id="show-graph">
 {% if graph %}
 {{ graph|safe }}
 {% else %}
 <p>No graph was provided.</p>
 {% endif %}
 
-<div id="show-graph">
-
 </div>
-<form id="graph-form" action="{% url 'final' %}" method="get">
-    <input type="hidden"
-           name="q"
-           value="load">
-    <input type="submit" 
-           value="Load Data">
-</form>
+<button id="loadData">Load Data</button>
 
 <script>
 
 $(document).ready(function () {
 
-    $('#graph-form').on('submit', function (e) {
+    $('#loadData').on('click', function (e) {
         e.preventDefault();
         var data = {'q': 'load'}
         var formURL = $(this).attr('action')
