@@ -51,7 +51,7 @@ def final(request):
         fig = go.Figure(data=[trace1,trace2,trace3], layout=layout)
         fig.update_layout(
         scene=dict(bgcolor='#0DEBC6'), )
-        graph = fig.to_html(full_html=False, default_height=800, default_width=800)
+        graph = fig.to_html(full_html=False, default_height=500, default_width=500)
         context = {'graph': graph}
         return JsonResponse(context)
 
@@ -66,7 +66,7 @@ def final(request):
         bgcolor='#0DEBC6'
         ), 
     )
-    graph = fig.to_html(full_html=False, default_height=800, default_width=800)
+    graph = fig.to_html(full_html=False, default_height=500, default_width=500)
     context = {'graph': graph}
     return render(request, 'graph/final.html', context)
 

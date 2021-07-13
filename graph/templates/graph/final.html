@@ -1,9 +1,45 @@
-<head>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-</head>
+{% extends "base.html" %}
+{% load static %}
+
+
+{% block css %}
+<style type="text/css">
+.loading-div {
+    display:    none;
+    position:   relative;
+    z-index:    1000;
+    height:     500px;
+    width:      500px;
+    background: rgba( 255, 255, 255, .8 )
+                url("{% static 'graph/loader1.gif' %}") 
+                50% 50% 
+                no-repeat;
+}
+
+#show-graph{
+    border: 1px solid red;
+    height: 600px;
+    width: 600px;
+}
+/* #show-graph.loading {
+    overflow: hidden;   
+} */
+
+/* Anytime the body has the loading class, our
+   modal element will be visible */
+/* #show-graph.loading-div {
+    display: block;
+} */
 
 
 
+</style>
+
+{% endblock %}
+
+
+
+{% block content %}
 <div id="show-graph">
 {% if graph %}
 {{ graph|safe }}
@@ -13,18 +49,36 @@
 
 </div>
 <button id="loadData">Load Data</button>
+<br>
+<br>
 
+
+
+<div>
+    
+</div>
+<div class="loading-div"></div>
+{% endblock %}
+
+{% block javascript %}
 <script>
+// $(document).on({
+//     ajaxStart: function() { $("#show-graph").html($('.loading-div').show());},  
+//     // ajaxStop: function() { $("#show-graph").removeClass('loading-div');}
+// });
 
 $(document).ready(function () {
+    $loader=$(".loading-div");
+
+
+
 
     $('#loadData').on('click', function (e) {
         e.preventDefault();
+        $("#show-graph").html($loader.show());
         var data = {'q': 'load'}
-        var formURL = $(this).attr('action')
         
         $.ajax({
-            url: formURL,
             type: "get",
             data: data,
             success: function (response) {
@@ -33,15 +87,12 @@ $(document).ready(function () {
                 // $("#contact-form").trigger('reset');
                 // $(".spinner").hide();
                 // handleAlerts('success', 'Your email has been sent successfully.');
-                console.log("success")
-                console.log(response['graph'])
                 $("#show-graph").html(response['graph']);
             },
             error: function (response) {
                 // alert the error if any error occured
                 //     console.log(response["responseJSON"])
                 // $(".spinner").hide();
-                console.log("error")
                 $("#show-graph").html("Hello <b>Failure</b>!");
 
             },
@@ -50,6 +101,8 @@ $(document).ready(function () {
     });
 
 });
+
+
 
 function getCookie(name) {
     let cookieValue = null;
@@ -82,3 +135,5 @@ $.ajaxSetup({
     }
 });
 </script>
+
+{% endblock %}
