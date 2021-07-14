@@ -4,48 +4,39 @@
 
 {% block css %}
 <style type="text/css">
-.loading-div {
-    display:    none;
-    position:   relative;
-    z-index:    1000;
-    height:     500px;
-    width:      500px;
-    background: rgba( 255, 255, 255, .8 )
-                url("{% static 'graph/loader1.gif' %}") 
-                50% 50% 
-                no-repeat;
-}
-
-#show-graph{
-    border: 1px solid red;
-    height: 600px;
-    width: 600px;
-}
-/* #show-graph.loading {
-    overflow: hidden;   
-} */
-
-/* Anytime the body has the loading class, our
-   modal element will be visible */
-/* #show-graph.loading-div {
-    display: block;
-} */
+    .loading-div {
+        display: none;
+        position: relative;
+        z-index: 1000;
+        height: 500px;
+        width: 500px;
+        background: rgba(255, 255, 255, .8) url("{% static 'graph/loader1.gif' %}") 50% 50% no-repeat;
+    }
 
 
+    #show-graph {
+        border: 1px solid red;
+        height: 600px;
+        width: 600px;
+    }
 
+    body.loading {
+        overflow: hidden;
+    }
 </style>
 
 {% endblock %}
 
 
-
 {% block content %}
+
+
 <div id="show-graph">
-{% if graph %}
-{{ graph|safe }}
-{% else %}
-<p>No graph was provided.</p>
-{% endif %}
+    {% if graph %}
+    {{ graph|safe }}
+    {% else %}
+    <p>No graph was provided.</p>
+    {% endif %}
 
 </div>
 <button id="loadData">Load Data</button>
@@ -53,87 +44,85 @@
 <br>
 
 
-
-<div>
-    
 </div>
 <div class="loading-div"></div>
+
 {% endblock %}
 
 {% block javascript %}
 <script>
-// $(document).on({
-//     ajaxStart: function() { $("#show-graph").html($('.loading-div').show());},  
-//     // ajaxStop: function() { $("#show-graph").removeClass('loading-div');}
-// });
+    // $(document).on({
+    //     ajaxStart: function() { $("#show-graph").html($('.loading-div').show());},  
+    //     // ajaxStop: function() { $("#show-graph").removeClass('loading-div');}
+    // });
 
-$(document).ready(function () {
-    $loader=$(".loading-div");
-
-
+    $(document).ready(function () {
+        $loader = $(".loading-div");
 
 
-    $('#loadData').on('click', function (e) {
-        e.preventDefault();
-        $("#show-graph").html($loader.show());
-        var data = {'q': 'load'}
-        
-        $.ajax({
-            type: "get",
-            data: data,
-            success: function (response) {
-                // on successfull creating object
-                // 1. clear the form.
-                // $("#contact-form").trigger('reset');
-                // $(".spinner").hide();
-                // handleAlerts('success', 'Your email has been sent successfully.');
-                $("#show-graph").html(response['graph']);
-            },
-            error: function (response) {
-                // alert the error if any error occured
-                //     console.log(response["responseJSON"])
-                // $(".spinner").hide();
-                $("#show-graph").html("Hello <b>Failure</b>!");
 
-            },
 
+        $('#loadData').on('click', function (e) {
+            e.preventDefault();
+            $("#show-graph").html($loader.show());
+            var data = { 'q': 'load' }
+
+            $.ajax({
+                type: "get",
+                data: data,
+                success: function (response) {
+                    // on successfull creating object
+                    // 1. clear the form.
+                    // $("#contact-form").trigger('reset');
+                    // $(".spinner").hide();
+                    // handleAlerts('success', 'Your email has been sent successfully.');
+                    $("#show-graph").html(response['graph']);
+                },
+                error: function (response) {
+                    // alert the error if any error occured
+                    //     console.log(response["responseJSON"])
+                    // $(".spinner").hide();
+                    $("#show-graph").html("Hello <b>Failure</b>!");
+
+                },
+
+            });
         });
+
     });
 
-});
 
 
-
-function getCookie(name) {
-    let cookieValue = null;
-    if (document.cookie && document.cookie !== '') {
-        const cookies = document.cookie.split(';');
-        for (let i = 0; i < cookies.length; i++) {
-            const cookie = cookies[i].trim();
-            // Does this cookie string begin with the name we want?
-            if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                break;
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
             }
         }
+        return cookieValue;
     }
-    return cookieValue;
-}
 
-const csrftoken = getCookie('csrftoken');
+    const csrftoken = getCookie('csrftoken');
 
-function csrfSafeMethod(method) {
-    // these HTTP methods do not require CSRF protection
-    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
-}
+    function csrfSafeMethod(method) {
+        // these HTTP methods do not require CSRF protection
+        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+    }
 
-$.ajaxSetup({
-    beforeSend: function (xhr, settings) {
-        if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
-            xhr.setRequestHeader("X-CSRFToken", csrftoken);
+    $.ajaxSetup({
+        beforeSend: function (xhr, settings) {
+            if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            }
         }
-    }
-});
+    });
 </script>
 
 {% endblock %}

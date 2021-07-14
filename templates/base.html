@@ -13,6 +13,23 @@
 
     <!-- Optional theme -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+    <style type="text/css">
+    .loader-wrapper {
+    z-index: 1000;
+    width: 100vw !important;
+    height: 100vh !important;
+    /*position relative to viewport or browser window itself*/
+    position: fixed;
+    top: 0;
+    left: 0;
+    background: rgba( 255, 255, 255, .8 ) 
+    url("{% static 'graph/loader1.gif' %}")  
+                50% 50% 
+                no-repeat;
+    background-color: #242f3f !important;
+    }
+
+    </style>
     {% block css %}
 
     {% endblock %}
@@ -21,7 +38,9 @@
 </head>
 
 
-<body>
+<body class="loading">
+<div class="loader-wrapper">
+</div>
 <header>
 
 </header>
@@ -35,9 +54,20 @@
 
 
 </div>
+
+<footer>
+
+</footer>
+
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-
+<script>
+$(window).on("load", function () {
+    // AOS.refreshHard()
+    $(".loader-wrapper").fadeOut("slow");
+    $("body").removeClass("loading");
+});
+</script>
 
 {% block javascript %}
 
