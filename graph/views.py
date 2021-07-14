@@ -56,7 +56,7 @@ def final(request):
         return JsonResponse(context)
 
     trace_Null=go.Scatter3d(x=[0],y=[0],z=[0])
-    layout=go.Layout(title="Example")
+    layout=go.Layout(title="Example", scene={'camera':{'eye':{'x':1.5,'y':1.5, 'z':1.5}, }})
     fig = go.Figure(data=trace_Null, layout=layout)
     fig.update_layout(
         scene=dict(
