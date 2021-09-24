@@ -1,0 +1,17 @@
+
+<form method="post" enctype="multipart/form-data" data-url='{{ request.build_absolute_uri|safe }}'>
+    {% csrf_token %}
+
+    {{form.as_p}}
+
+<div class="d-flex justify-content-center">
+    <button type="submit" class="btn btn-primary custom-button-contact">submit</button>
+</div>
+
+
+</form>
+
+{% for child in childs %}
+{{ child }}
+<!-- {{ child.name }} -->
+{% endfor %}

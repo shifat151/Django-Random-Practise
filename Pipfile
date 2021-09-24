@@ -6,6 +6,7 @@ name = "pypi"
 [packages]
 django = "==3.0.3"
 plotly = "==5.1.0"
+faker = "*"
 
 [dev-packages]
 

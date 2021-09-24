@@ -40,7 +40,8 @@ INSTALLED_APPS = [
 
     #Apps
     'account.apps.AccountConfig',
-    'graph.apps.GraphConfig'
+    'graph.apps.GraphConfig',
+    'modelPrac.apps.ModelpracConfig'
 ]
 
 MIDDLEWARE = [

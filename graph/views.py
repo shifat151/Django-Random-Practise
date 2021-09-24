@@ -3,7 +3,7 @@ from django.views.generic import TemplateView
 import plotly.offline as opy
 import plotly.graph_objs as go
 import random
-from django.http import JsonResponse
+from django.http import JsonResponse, response
 # import plotly.express as px
 
 # Create your views here.
@@ -56,7 +56,7 @@ def final(request):
         return JsonResponse(context)
 
     trace_Null=go.Scatter3d(x=[0],y=[0],z=[0])
-    layout=go.Layout(title="Example", scene={'camera':{'eye':{'x':1.5,'y':1.5, 'z':1.5}, }})
+    layout=go.Layout(title="Example", scene={'camera':{'eye':{'x':-1.5,'y':2, 'z':0.5}, }})
     fig = go.Figure(data=trace_Null, layout=layout)
     fig.update_layout(
         scene=dict(
@@ -119,4 +119,8 @@ class Graph(TemplateView):
         context['graph'] = div
 
         return context
+
+def save_wish(request):
+    pass
+            
 
