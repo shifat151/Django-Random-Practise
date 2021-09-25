@@ -1,7 +1,6 @@
 from django.core.management import BaseCommand
 from faker import Faker, providers
 from modelPrac.models import Musician, Concert, Album
-from django.db.models import Max, Min
 
 
 albums=[
@@ -74,22 +73,20 @@ class Command(BaseCommand):
             l_name=fake.unique.last_name()
             Musician.objects.create(first_name=f_name, last_name=l_name)
         
-        max_id_dict=Musician.objects.aggregate(Max('id'))
-        max=list(max_id_dict.values())[0]
-        min_id_dict=Musician.objects.aggregate(Min('id'))
-        min=list(min_id_dict.values())[0]
+
+        Muzician_ids=tuple(Musician.objects.values_list('id', flat=True))
 
         for _ in range(0, len(albums)):
             album_name=fake.unique.album_names()
             date=fake.date()
             Album.objects.create(name=album_name, 
             release_date=date,
-            artist_id=fake.random_element(elements=tuple(range(min, max)))
+            artist_id=fake.random_element(elements=Muzician_ids)
             )
         for _ in range(0, len(concerts)):
             concert_name=fake.unique.concert_names()
             concert_location=fake.city()
-            artists_id=fake.random_choices(elements=tuple(range(min, max)))
+            artists_id=fake.random_choices(elements=Muzician_ids)
             c1=Concert.objects.create(
                 name=concert_name,
                 location=concert_location,
